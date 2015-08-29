@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RemoveAAAdblockTopSerialy
 // @namespace    https://github.com/JurajNyiri/
-// @version      1.0
+// @version      1.1
 // @description  Removes anti-anti adblock on TopSerialy
 // @author       Juraj Nyíri | jurajnyiri.eu
 // @encoding utf-8
@@ -19,18 +19,23 @@ var openLoad = ""
 var parentIframe = ""
 $(function() 
 {
-    $.each($("iframe"), function( i, l ){
-        if($(l).attr("src").indexOf("openload") > -1)
+    $.get(window.location.href, function(data) 
+    {
+        var iframes = $('iframe', data);
+        $.each(iframes, function( i, l )
         {
-            openLoad = $(l).attr("src");
-            parentIframe = $(l).parent();
-            
-            var newHtmlContent = "<iframe src='"+openLoad+"' scrolling='no' frameborder='0' width='100%' height='405' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>";
-            
-            setTimeout(function() {
-                parentIframe.html(newHtmlContent)
-                console.log(parentIframe.html())
-            },1)
-        }
-    });
+            if($(l).attr("src").indexOf("openload") > -1)
+            {
+                openLoad = $(l).attr("src");
+                parentIframe = $(l).parent();
+
+                var newHtmlContent = "<iframe src='"+openLoad+"' scrolling='no' frameborder='0' width='100%' height='405' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>";
+
+                setTimeout(function() {
+                    $("#" + parentIframe.attr("id")).html(newHtmlContent)
+                },1)
+            }
+        });
+    })
 });
+
